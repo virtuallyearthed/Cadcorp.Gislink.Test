@@ -16,20 +16,12 @@ class Cadcorp_Gislink_Test(gislink.Program):
             app_name = "Test GisLink App"
             super().__init__(name=app_name)
 
-            # Add SIS Ribbon controls
-            btn = gislink.RibbonButton('Test Gislink')
-            btn.help = 'Prints to the log'
-            btn.description = 'Please print.'
-            btn.min_selection = -1  # Disable button if no SWD is present
-            btn.min_status = 1  # visible
-            btn.enabled = True
-            btn.default_command = True
-            btn.click.add_handler(self.on_click_print)
-            self.application.ribbon_group.add_control(btn)
+            # respond to every changed selection
+            self.application.add_trigger(
+                "SelectionChange", self.on_selection_changed)
+
         except Exception as e:
             self.log.fatal("Error initialising Gislink %s", e)
 
-    def on_click_print(self, event):
-        self.log.debug("You clicked me")
-
-
+    def on_selection_changed(self, event):
+        self.log.debug("Selection Changed:")
