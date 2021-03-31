@@ -1,6 +1,7 @@
 import gislink
 import logging
 from pathlib import Path
+from cadcorp_gislink_form import ModalForm
 
 cadcorp_version = '0.1'
 cadcorp_vendor = 'West Yorkshire Police'
@@ -25,3 +26,11 @@ class Cadcorp_Gislink_Test(gislink.Program):
 
     def on_selection_changed(self, event):
         self.log.debug("Selection Changed:")
+        try:
+            self.log.debug("Let's open that form")
+            form = ModalForm(self.name, event.desktop)
+            form.show()  # Modal mode, SIS inaccessible until form is closed
+            self.log.debug("Form is closed")
+
+        except Exception as e:
+            self.log.error("Error on Selection Change: %s", e)
