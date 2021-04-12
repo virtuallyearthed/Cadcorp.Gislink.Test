@@ -28,8 +28,12 @@ class Cadcorp_Gislink_Test(gislink.Program):
         self.log.debug("Selection Changed:")
         try:
             self.log.debug("Let's open that form")
-            form = ModalForm(self.name, event.desktop)
-            form.show()  # Modal mode, SIS inaccessible until form is closed
+            # https://community.cadcorp.com/t/example-python-scripts-with-a-gui/1019/9
+            # Takeover will prevent interactions with SIS desktop,
+            # forcing modal mode
+            with self.application.takeover_desktop() as desktop:
+                form = ModalForm(self.name, desktop)
+                form.show()  # will wait until the form is closed
             self.log.debug("Form is closed")
 
         except Exception as e:
